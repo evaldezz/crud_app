@@ -20,7 +20,7 @@ export default function Header(props: MenuToggleProps) {
         </IconButton>
         <LinkButton to="/" sx={{ flexGrow: 1 }}>
           <Typography variant="h6" color="white" >
-            App de Ejemplo
+            IONIX
           </Typography>
         </LinkButton>
         <UserAvatar />

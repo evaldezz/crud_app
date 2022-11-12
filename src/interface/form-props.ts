@@ -1,4 +1,4 @@
-export type IdProps = { id: string | undefined };
+export type IdProps = { id: number | undefined };
 
 export type OnSubmitProps = { onSubmit: () => void };
 

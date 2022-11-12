@@ -1,9 +1,10 @@
-import * as React from 'react';
-import { Box, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import LinkButton from '../mui/LinkButton';
+import * as React from 'react';
+import { useAuth } from '../contexts/auth-context';
 
 export default function UserAvatar() {
+  const { logout } = useAuth();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -12,6 +13,7 @@ export default function UserAvatar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+    logout();
   };
 
   return (
@@ -38,10 +40,7 @@ export default function UserAvatar() {
         onClose={handleCloseUserMenu}
       >
           <MenuItem onClick={handleCloseUserMenu}>
-            <LinkButton to={'profile'} textalign="center">Profile</LinkButton>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <LinkButton to={'login'} textalign="center">Logout</LinkButton>
+            <Typography textAlign="center">Logout</Typography>
           </MenuItem>
       </Menu>
     </Box>

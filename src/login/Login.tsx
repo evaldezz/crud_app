@@ -1,56 +1,62 @@
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { TextField } from '@mui/material';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import * as yup from 'yup';
+import { useAuth } from "../contexts/auth-context";
+import AlertError from '../mui/AlertError';
 import CenteredBox from '../mui/CenteredBox';
 import CenteredGrid from '../mui/CenteredGrid';
 import CustomLoadingButton from '../mui/CustomLoadingButton';
 import { sendDataToAPI } from '../utils/api';
 import { loginStyle } from '../utils/login-styles';
+import { LoginReqDto, LoginResDto } from './interface/auth.dto';
 
-
-type login = {
-  user: string,
-  password: string,
-}
 export default function Login() {
-  const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const { login } = useAuth();
   const validationSchema = yup.object({
-    user: yup.string().required('Title is required'),
-    password: yup.string().required('Title is required'),
+    username: yup.string().required('The username is required'),
+    password: yup.string().required('The password is required'),
   });
-  const initialValues: login = {
-    user: '',
+  const initialValues: LoginReqDto = {
+    username: '',
     password: '',
   };
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values: login) => {
-        sendDataToAPI(`todos`, values);
-        navigate('/todos');
+    onSubmit: (values: LoginReqDto) => {
+      sendDataToAPI<LoginReqDto, LoginResDto>('auth/login', values).then((resp) => {
+        login(resp);
       }
-    });
+      ).catch(error => {
+        setError(error.message)
+      });
+    },
+  });
 
   return (
     <CenteredGrid>
+      {error && <AlertError>{error}</AlertError>}
       <form style={loginStyle} onSubmit={formik.handleSubmit}>
         <CenteredBox>
-          <AccountBoxIcon sx={{ width: '50px', height: '50px', color: 'grey'}}/>
+          <AccountBoxIcon
+            sx={{ width: '50px', height: '50px', color: 'grey' }}
+          />
         </CenteredBox>
         <CenteredBox>
           <TextField
             fullWidth
             size="small"
-            id="user"
-            name="user"
+            id="username"
+            name="username"
             label="Usuario"
-            margin='normal'
-            value={formik.values.user}
+            margin="normal"
+            value={formik.values.username}
             onChange={formik.handleChange}
-            error={formik.touched.user && Boolean(formik.errors.user)}
-            helperText={formik.touched.user && formik.errors.user}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
           />
           <TextField
             fullWidth
@@ -58,7 +64,8 @@ export default function Login() {
             id="password"
             name="password"
             label="Contraseña"
-            margin='normal'
+            type="password"
+            margin="normal"
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
@@ -66,9 +73,7 @@ export default function Login() {
           />
         </CenteredBox>
         <CenteredBox>
-          <CustomLoadingButton>
-            Ingresar
-          </CustomLoadingButton>
+          <CustomLoadingButton>Ingresar</CustomLoadingButton>
         </CenteredBox>
       </form>
     </CenteredGrid>

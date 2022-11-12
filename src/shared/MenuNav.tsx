@@ -1,7 +1,5 @@
-import React from 'react';
 import {
-  MoveToInbox as InboxIcon,
-  Mail as MailIcon,
+  Mail as MailIcon
 } from '@mui/icons-material';
 import { Divider, List, Toolbar } from '@mui/material';
 import { MenuToggleProps } from './menu';
@@ -14,14 +12,8 @@ export default function MenuNav(props: MenuToggleProps) {
       <Divider />
       <List>
         <MenuItem
-          to="posts"
-          primary="Post"
-          icon={<InboxIcon />}
-          onClick={props.handleMenuToggle}
-        />
-        <MenuItem
-          to="todos"
-          primary="Todo"
+          to="users"
+          primary="User"
           icon={<MailIcon />}
           onClick={props.handleMenuToggle}
         />

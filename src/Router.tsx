@@ -1,34 +1,36 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PostList from './posts/screens/PostList';
-import PostForm from './posts/screens/PostForm';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './shared/Layout';
-import TodoList from './todos/screens/TodoList';
-import Sandbox from './TypeSripct/Sandbox';
-import PostTodo from './todos/screens/PostTodo';
-import Login from './shared/Login';
+import Login from './login/Login';
+import UserList from './user/screens/UserList';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthProvider } from './contexts/auth-context';
+import RefreshProvider from './contexts/refresh-context';
+import GlobalAlert from './components/GlobalAlert';
 
+const UserListProtectedRoute = () => (
+  <ProtectedRoute>
+    <UserList />
+  </ProtectedRoute>
+);
 function Router() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-        <Route path="/login" element={<Login />}/>
-          <Route index element={<PostList />} />
-          <Route path="posts">
-            <Route index element={<PostList />} />
-            <Route path="new" element={<PostForm />} />
-            <Route path=":id" element={<PostForm />} />
-          </Route>
-          <Route path="todos">
-            <Route index element={<TodoList />} />
-            <Route path="new" element={<PostTodo />} />
-            <Route path=":id" element={<PostTodo />} />
-            <Route path="profile" element={<Sandbox />} />
-
-          </Route>
-        </Route>
-      </Routes>
+    <AuthProvider>
+      <RefreshProvider>
+        <>
+          <GlobalAlert/>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<UserListProtectedRoute />} />
+              <Route path="users">
+                <Route index element={<UserListProtectedRoute />} />
+              </Route>
+            </Route>
+          </Routes>
+        </>
+      </RefreshProvider>
+    </AuthProvider>
     </BrowserRouter>
   );
 }

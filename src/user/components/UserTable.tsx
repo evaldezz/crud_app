@@ -2,17 +2,17 @@ import React from 'react';
 import { CircularProgress } from '@mui/material';
 import AlertError from '../../mui/AlertError';
 import Table from '../../mui/Table';
-import useTodoListState from '../hooks/todo-list';
+import useUserListState from '../hooks/user-list';
 import TableContainer from '../../shared/TableContainer';
-import columns from './TodoTable.headers';
+import columns from './UserTable.headers';
 
-export default function TodoList() {
-  const { loading, data, error } = useTodoListState();
+export default function UserTable() {
+  const { loading, data, error } = useUserListState();
   return (
     <TableContainer>
       {loading && <CircularProgress />}
       {data.length > 0 && <Table rows={data} columns={columns} />}
-      {error && <AlertError>No se pudo obtener la lista de Todos</AlertError>}
+      {error && <AlertError>The users list couldn't be loaded</AlertError>}
     </TableContainer>
   );
 }

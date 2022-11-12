@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ApiResponse, getDataFromAPI } from '../../utils/api';
-import { Todo } from '../interface/todo';
+import { User } from '../interface/user';
 
-export default function useTodoByIdState(id: string | undefined) {
-  const [state, setState] = useState<ApiResponse<Todo | undefined>>({
+export default function useUserByIdState(id: number | undefined) {
+  const [state, setState] = useState<ApiResponse<User | undefined>>({
     loading: true,
     data: undefined,
     error: undefined,
@@ -12,7 +12,7 @@ export default function useTodoByIdState(id: string | undefined) {
     (async () => {
       try {
         if (id) {
-          const data = await getDataFromAPI<Todo>(`todos/${id}`);
+          const data = await getDataFromAPI<User>(`users/${id}`);
           setState({ loading: false, data, error: undefined });
         } else {
           setState({ loading: false, data: undefined, error: undefined });
